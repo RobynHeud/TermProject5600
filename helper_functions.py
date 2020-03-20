@@ -1,28 +1,47 @@
 import math
-
+import numpy as np
 
 s = 86164.09  # one sidereal day
 R = 6367444.5  # radius of the earth
 
 
-# Takes in fixed spherical coordinates in DMS format and converts to cartesian position.
+def rotation_matrix(ts):
+    alpha = 2 * math.pi * ts / s
+    return np.matrix(
+        [[math.cos(alpha), -math.sin(alpha), 0], [math.sin(alpha), math.cos(alpha), 0], [0, 0, 1]])
+
+
+# Takes in geographic coordinates in DMS format and converts to cartesian position.
 # NS and EW are either 1 or -1, 1 for North and East, -1 for South and West
-def polar_to_cart(lat_deg, lat_min, lat_sec, NS, long_deg, long_min, long_sec, EW, altitude):
+def polar_to_cart(timestamp, lat_deg, lat_min, lat_sec, NS, long_deg, long_min, long_sec, EW, altitude):
+    matrix = rotation_matrix(timestamp)
+
     lat_rads = NS * rads(lat_deg, lat_min, lat_sec)
     long_rads = EW * rads(long_deg, long_min, long_sec)
     r = R + altitude
-    return r * math.sin(lat_rads) * math.cos(long_rads), r * math.sin(lat_rads) * math.sin(long_rads), r * math.cos(
-        lat_rads)
+
+    coords = np.array([r * math.cos(lat_rads) * math.cos(long_rads), r * math.cos(lat_rads) * math.sin(long_rads),
+                       r * math.sin(lat_rads)])
+
+    rotated_coords = matrix.dot(coords.transpose())
+    return np.squeeze(np.asarray(rotated_coords))
 
 
-# Converts cartesian coordinates to polar coordinates and returns in DMS format.
+# Converts cartesian coordinates to geographic coordinates and returns in DMS format.
 # If z < 0, theta is negative
-def cart_to_polar(x, y, z):
+def cart_to_polar(ts, x, y, z):
+    # Undo the rotation
+    rot_matrix = np.linalg.inv(rotation_matrix(ts))
+    coords = rot_matrix.dot(np.array([x, y, z]).transpose())
+    x = coords[0,0]
+    y = coords[0,1]
+    z = coords[0,2]
+
     NS = z / abs(z)
     EW = y / abs(y)
     r = math.sqrt(x ** 2 + y ** 2 + z ** 2)
     if x != 0:
-        theta = math.arctan(y / x)
+        theta = np.arctan(y / x)
     else:
         theta = math.pi / 2
 
@@ -33,7 +52,7 @@ def cart_to_polar(x, y, z):
     elif x < 0 and y < 0:
         theta = abs(theta - math.pi)
 
-    phi = math.arccos(abs(z) / r)
+    phi = np.arccos(abs(z) / r)
     altitude = r - R
     (lat_deg, lat_min, lat_sec) = dms(math.pi / 2 - phi)
     (long_deg, long_min, long_sec) = dms(theta)
@@ -60,4 +79,3 @@ def rads(degrees, minutes, seconds):
     # convert to seconds first
     temp = degrees * 3600 + minutes * 60 + seconds
     return temp * math.pi / (3600 * 180)
-

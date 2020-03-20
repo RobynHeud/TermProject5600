@@ -21,8 +21,11 @@ for input in sys.stdin:
         value_array.append(new_elm)
 
 
-    # Translate to Cartesian coordinates
-    cart_coords = help.polar_to_cart(*value_array[1:])
+    # Translate to Cartesian coordinates with rotation
+    cart_coords = help.polar_to_cart(*value_array)
+    print(cart_coords)
+    polar_coords = help.cart_to_polar(0, *cart_coords)
+    print(polar_coords)
 
     # Use new coordinates to determine what satellites are in view/above the horizon
 
