@@ -83,30 +83,18 @@ with open("Satellite.log", "w") as log:
                 else:
                     print("here")
 
-        print(u)
-
-
-    log.write("\n")
-
-    print(R)
-    print(pi)
-    print(c)
-    print(s)
-
     # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
-    # for line in sys.stdin:
-    #     log.write(line)
+    for line in sys.stdin:
+        # Parse the string and convert to Float64
+        line_array = line.split()
+        value_array = []
+        for elm in line_array:
+            new_elm = float(elm)
+            value_array.append(new_elm)
 
-    #     # Parse the string and convert to Float64
-    #     line_array = line.split()
-    #     value_array = []
-    #     for elm in line_array:
-    #         new_elm = float(elm)
-    #         value_array.append(new_elm)
-
-    #     # Translate to Cartesian coordinates with rotation
-    #     cart_coords = help.polar_to_cart(*value_array)
-    #     print(cart_coords)
+        # Translate to Cartesian coordinates with rotation
+        cart_coords = help.polar_to_cart(*value_array)
+        print(cart_coords)
 
         # Use new coordinates to determine what satellites are in view/above the horizon
     
