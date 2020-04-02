@@ -22,6 +22,7 @@ period = [0 for x in range(24)]
 altitude = [0 for x in range(24)]
 phase = [0 for x in range(24)]
 
+#Creates and writes to log file
 with open("Satellite.log", "w") as log:
     log.write("Satellite Log, Jess Campbell, Austin Watkins, Carlos Guerra\n")
     log.write("\n  data.dat: \n\n")
@@ -80,23 +81,21 @@ with open("Satellite.log", "w") as log:
                     log.write("phase[{Sat}] = {Info}\n".format(Sat = SatNumb, Info = line_info[0]))
                     index = index + 1
                     SatNumb = SatNumb + 1
-                else:
-                    print("here")
 
-    # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
-    for line in sys.stdin:
-        # Parse the string and convert to Float64
-        line_array = line.split()
-        value_array = []
-        for elm in line_array:
-            new_elm = float(elm)
-            value_array.append(new_elm)
+        # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
+        for line in sys.stdin:
+            # Parse the string and convert to Float64
+            line_array = line.split()
+            value_array = []
+            for elm in line_array:
+                new_elm = float(elm)
+                value_array.append(new_elm)
 
-        # Translate to Cartesian coordinates with rotation
-        cart_coords = help.polar_to_cart(*value_array)
-        print(cart_coords)
+            # Translate to Cartesian coordinates with rotation
+            cart_coords = help.polar_to_cart(*value_array)
+            print(cart_coords)
 
-        # Use new coordinates to determine what satellites are in view/above the horizon
-    
+            # Use new coordinates to determine what satellites are in view/above the horizon
 
-        # Output index, timestamp, and cartesian coordinate location to stdout
+
+            # Output index, timestamp, and cartesian coordinate location to stdout
