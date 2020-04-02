@@ -2,6 +2,7 @@ import math
 import numpy as np
 import scipy
 
+#These should be read in from data.dat 
 s = 86164.09  # one sidereal day
 R = 6367444.5  # radius of the earth
 
