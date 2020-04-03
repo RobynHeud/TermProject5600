@@ -1,58 +1,59 @@
 import sys
 import helper_functions as help
 import numpy as np
-import scipy
+import scipy.constants
 import logging
 import os
 from decimal import *
 
+c = scipy.constants.speed_of_light
 # Radius of the Earth
-R = 6367444.50 # meters
+R = 6367444.50  # meters
 # Sidereal Day
-s = 86164.09 # seconds
+s = 86164.09  # seconds
 # Satellite Height
-h = 20200200 # meters
+h = 20200200  # meters
 # Satellite Orbital Period
 p = s / 2
 
-#Data from data.dat file 
-u = [[0 for x in range(3)]for y in range(24)]
+# Data from data.dat file
+u = [[0 for x in range(3)] for y in range(24)]
 v = [[0 for x in range(3)] for y in range(24)]
 period = [0 for x in range(24)]
 altitude = [0 for x in range(24)]
 phase = [0 for x in range(24)]
 
-#Creates and writes to log file
+# Creates and writes to log file
 with open("Satellite.log", "w") as log:
     log.write("Satellite Log, Jess Campbell, Austin Watkins, Carlos Guerra\n")
     log.write("\n  data.dat: \n\n")
 
-    #Writes/Reads information from data.dat
+    # Writes/Reads information from data.dat
     with open("data.dat", "r") as data:
         SatNumb = 0
         index = 0
         for line in data:
             line_info = line.split("/=")
-            #Reads in Pi
-            if(index == 0):
+            # Reads in Pi
+            if index == 0:
                 pi = Decimal(line_info[0])
                 log.write("pi = {}\n".format(pi))
                 index = index + 1
 
-            #Reads in C
-            elif(index == 1):
+            # Reads in C
+            elif index == 1:
                 c = Decimal(line_info[0])
                 log.write("c = {}\n".format(c))
                 index = index + 1
 
-            #Reads in R
-            elif(index == 2):
+            # Reads in R
+            elif index == 2:
                 R = Decimal(line_info[0])
                 log.write("R = {}\n".format(R))
                 index = index + 1
 
-            #Reads in the value for s
-            elif(index == 3):
+            # Reads in the value for s
+            elif index == 3:
                 s = Decimal(line_info[0])
                 log.write("s = {}\n".format(s))
                 index = index + 1
@@ -60,25 +61,26 @@ with open("Satellite.log", "w") as log:
             else:
                 tempIndex = (index - 4) % 9
 
-                if(tempIndex == 0 or tempIndex == 1 or tempIndex == 2):
+                if tempIndex == 0 or tempIndex == 1 or tempIndex == 2:
                     u[SatNumb][tempIndex] = float(line_info[0])
-                    log.write("u[{Sat}][{Index}] = {Info}\n".format(Sat = SatNumb, Index = tempIndex, Info = line_info[0]))
+                    log.write("u[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=tempIndex, Info=line_info[0]))
                     index = index + 1
-                elif(tempIndex == 3 or tempIndex == 4 or tempIndex == 5):
+                elif tempIndex == 3 or tempIndex == 4 or tempIndex == 5:
                     v[SatNumb][tempIndex % 3] = line_info[0]
-                    log.write("v[{Sat}][{Index}] = {Info}\n".format(Sat = SatNumb, Index = (tempIndex % 3), Info = line_info[0]))
+                    log.write(
+                        "v[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=(tempIndex % 3), Info=line_info[0]))
                     index = index + 1
-                elif(tempIndex == 6):
-                    period[SatNumb] =line_info[0]
-                    log.write("period[{Sat}] = {Info}\n".format(Sat = SatNumb, Info = line_info[0]))
+                elif tempIndex == 6:
+                    period[SatNumb] = line_info[0]
+                    log.write("period[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
-                elif(tempIndex == 7):
+                elif tempIndex == 7:
                     altitude[SatNumb] = line_info[0]
-                    log.write("altitude[{Sat}] = {Info}\n".format(Sat = SatNumb, Info = line_info[0]))
+                    log.write("altitude[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
-                elif(tempIndex == 8):
+                elif tempIndex == 8:
                     phase[SatNumb] = line_info[0]
-                    log.write("phase[{Sat}] = {Info}\n".format(Sat = SatNumb, Info = line_info[0]))
+                    log.write("phase[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
                     SatNumb = SatNumb + 1
 
@@ -96,6 +98,5 @@ with open("Satellite.log", "w") as log:
             print(cart_coords)
 
             # Use new coordinates to determine what satellites are in view/above the horizon
-
 
             # Output index, timestamp, and cartesian coordinate location to stdout

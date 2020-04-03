@@ -1,5 +1,4 @@
 import sys
-
 from collections import defaultdict
 from math import sqrt
 from typing import List
@@ -7,6 +6,9 @@ from typing import List
 import numpy as np
 
 import helper_functions as help
+import scipy.constants
+
+c = scipy.constants.speed_of_light
 
 
 class Satellite:
@@ -44,11 +46,11 @@ def distance(V, S):
     return sqrt((V.x - S.x) ** 2 + (V.y - S.y) ** 2 + (V.z - S.z) ** 2)
 
 
-def solve_location(satellites: List[Satellite]):
+def solve_location(sats: List[Satellite]):
     """
     Solve the non linear system of equations.
 
-    :param satellites:
+    :param sats:
     :return:
     """
 
@@ -56,10 +58,9 @@ def solve_location(satellites: List[Satellite]):
     V = Vehicle(-1795225.28989696, -4477174.36119832, 4158593.45315397)
 
     for _ in range(5000):
-
         satellite_by_two = []
-        for i in range(0, len(satellites) - 1):
-            satellite_by_two.append(satellites[i:i + 2])
+        for i in range(0, len(sats) - 1):
+            satellite_by_two.append(sats[i:i + 2])
 
         F = []
         matrix = []
@@ -72,7 +73,7 @@ def solve_location(satellites: List[Satellite]):
             matrix.append(row)
 
             # fixme: import speed of light
-            F.append(distance(V, s1) - distance(V, s2) - 299792458 * (s2.t - s1.t))
+            F.append(distance(V, s1) - distance(V, s2) - c * (s2.t - s1.t))
 
         jacobian = np.array(matrix)
         s = np.array(F)
@@ -104,4 +105,3 @@ for group_satellite in satellite_for_t:
     sol = solve_location(group_satellite)
     polar = help.cart_to_polar(0, sol.x, sol.y, sol.z)
     print(polar)
-
