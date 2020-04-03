@@ -1,5 +1,5 @@
 import sys
-import helper_functions as help
+import helper_functions as helper
 import numpy as np
 import scipy.constants
 import logging
@@ -94,7 +94,7 @@ with open("Satellite.log", "w") as log:
                 value_array.append(new_elm)
 
             # Translate to Cartesian coordinates with rotation
-            cart_coords = help.polar_to_cart(*value_array)
+            cart_coords = helper.polar_to_cart(*value_array)
             print(cart_coords)
 
             # Use new coordinates to determine what satellites are in view/above the horizon

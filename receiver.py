@@ -5,10 +5,18 @@ from typing import List
 
 import numpy as np
 
-import helper_functions as help
+import helper_functions as helper
 import scipy.constants
 
 c = scipy.constants.speed_of_light
+# Radius of the Earth
+R = 6367444.50  # meters
+# Sidereal Day
+s = 86164.09  # seconds
+# Satellite Height
+h = 20200200  # meters
+# Satellite Orbital Period
+p = s / 2
 
 
 class Satellite:
@@ -55,9 +63,9 @@ def solve_location(sats: List[Satellite]):
     """
 
     # At SLC:
-    V = Vehicle(-1795225.28989696, -4477174.36119832, 4158593.45315397)
+    V = Vehicle(0, 0, R)
 
-    for _ in range(5000):
+    for _ in range(4):
         satellite_by_two = []
         for i in range(0, len(sats) - 1):
             satellite_by_two.append(sats[i:i + 2])
@@ -72,12 +80,11 @@ def solve_location(sats: List[Satellite]):
                 row.append(matrix_element)
             matrix.append(row)
 
-            # fixme: import speed of light
             F.append(distance(V, s1) - distance(V, s2) - c * (s2.t - s1.t))
 
         jacobian = np.array(matrix)
         s = np.array(F)
-        # todo: build linear solver ourselves (??)
+
         sol = np.linalg.solve(jacobian.T @ jacobian, -jacobian.T @ s)
         V.x += sol[0]
         V.y += sol[1]
@@ -103,5 +110,5 @@ satellite_for_t = sorted(satellite_for_t.items(), key=lambda x: x[0])
 satellite_for_t = [s for (t, s) in satellite_for_t]
 for group_satellite in satellite_for_t:
     sol = solve_location(group_satellite)
-    polar = help.cart_to_polar(0, sol.x, sol.y, sol.z)
+    polar = helper.cart_to_polar(0, sol.x, sol.y, sol.z)
     print(polar)

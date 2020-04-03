@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1ae75535-39c9-4c0e-9617-3ca7d965c884" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TermProject5600.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TermProject5600.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Jess_Campbell.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Jess_Campbell.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helper_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/helper_functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/receiver.py" beforeDir="false" afterPath="$PROJECT_DIR$/receiver.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/satellite.py" beforeDir="false" afterPath="$PROJECT_DIR$/satellite.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/satellite.spec" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +19,7 @@
         <entry file="file://$PROJECT_DIR$/helper_functions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
-              <caret line="6" column="36" lean-forward="true" selection-start-line="6" selection-start-column="36" selection-end-line="7" selection-end-column="34" />
+              <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="7" selection-end-column="34" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -33,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/satellite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="153">
+              <caret line="9" selection-start-line="9" selection-end-line="16" selection-end-column="9" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -45,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/receiver.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
-              <caret line="96" column="40" lean-forward="true" selection-start-line="96" selection-start-column="40" selection-end-line="96" selection-end-column="40" />
+            <state relative-caret-position="357">
+              <caret line="90" column="21" lean-forward="true" selection-start-line="90" selection-start-column="21" selection-end-line="90" selection-end-column="21" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -69,6 +66,7 @@
       <find>arc</find>
       <find>speed</find>
       <find>3</find>
+      <find>help</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -257,7 +255,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.receiver">
+    <configuration name="receiver" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TermProject5600" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/receiver.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="satellite" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TermProject5600" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -279,8 +298,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.satellite" />
+      <item itemvalue="Python.receiver" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.receiver" />
         <item itemvalue="Python.satellite" />
       </list>
     </recent_temporary>
@@ -310,7 +334,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584744711984</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Minor mods">
+      <created>1585934121653</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1585934121653</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -322,7 +353,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32972974" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32972974" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32972974" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -344,7 +375,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit - translation from Julia" />
     <MESSAGE value="Fixed error in polar_to_cart" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed error in polar_to_cart" />
+    <MESSAGE value="Minor mods" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor mods" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -445,7 +477,7 @@
     <entry file="file://$PROJECT_DIR$/helper_functions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="6" column="36" lean-forward="true" selection-start-line="6" selection-start-column="36" selection-end-line="7" selection-end-column="34" />
+          <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="7" selection-end-column="34" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -454,8 +486,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/satellite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="16" selection-end-column="9" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -464,8 +496,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/receiver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="96" column="40" lean-forward="true" selection-start-line="96" selection-start-column="40" selection-end-line="96" selection-end-column="40" />
+        <state relative-caret-position="357">
+          <caret line="90" column="21" lean-forward="true" selection-start-line="90" selection-start-column="21" selection-end-line="90" selection-end-column="21" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
