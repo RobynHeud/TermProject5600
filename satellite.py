@@ -62,27 +62,29 @@ with open("Satellite.log", "w") as log:
                 tempIndex = (index - 4) % 9
 
                 if tempIndex == 0 or tempIndex == 1 or tempIndex == 2:
-                    u[SatNumb][tempIndex] = float(line_info[0])
+                    u[SatNumb][tempIndex] = Decimal(line_info[0])
                     log.write("u[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=tempIndex, Info=line_info[0]))
                     index = index + 1
                 elif tempIndex == 3 or tempIndex == 4 or tempIndex == 5:
-                    v[SatNumb][tempIndex % 3] = line_info[0]
+                    v[SatNumb][tempIndex % 3] = Decimal(line_info[0])
                     log.write(
                         "v[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=(tempIndex % 3), Info=line_info[0]))
                     index = index + 1
                 elif tempIndex == 6:
-                    period[SatNumb] = line_info[0]
+                    period[SatNumb] = Decimal(line_info[0])
                     log.write("period[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
                 elif tempIndex == 7:
-                    altitude[SatNumb] = line_info[0]
+                    altitude[SatNumb] = Decimal(line_info[0])
                     log.write("altitude[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
                 elif tempIndex == 8:
-                    phase[SatNumb] = line_info[0]
+                    phase[SatNumb] = Decimal(line_info[0])
                     log.write("phase[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
                     index = index + 1
                     SatNumb = SatNumb + 1
+                else:
+                    continue
 
         # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
         for line in sys.stdin:
@@ -98,5 +100,22 @@ with open("Satellite.log", "w") as log:
             print(cart_coords)
 
             # Use new coordinates to determine what satellites are in view/above the horizon
+            sat_in_view = []
+            for sat in satList:
+                if(helper.above_horizon(*cart_coords, 0, 0, 0)):
+                    sat_in_view.append(sat)
+            t_v = value_array[0]    
+            for sat in sat_in_view:
+                #time iteration
+                epoch = 0
+                done = False
+                current = t_v
+                while not done:
+                    next = t_v - np.linalg.norm(get_curr_position(current)-cart_coords)/helper.c
+                    if(abs(next-current) < Decimal(0.01/helper.c)):
+                        done = True
+                    else:
+                        current = next
+
 
             # Output index, timestamp, and cartesian coordinate location to stdout
