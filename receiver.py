@@ -2,27 +2,13 @@ import sys
 from collections import defaultdict
 from math import sqrt
 from typing import List
-
 import numpy as np
-
 import helper_functions as helper
-import scipy.constants
-
-c = scipy.constants.speed_of_light
-# Radius of the Earth
-R = 6367444.50  # meters
-# Sidereal Day
-s = 86164.09  # seconds
-# Satellite Height
-h = 20200200  # meters
-# Satellite Orbital Period
-p = s / 2
 
 
 class Satellite:
     """
     A representation for a Satellite with a label (id number) sending a signal (x, y, z) at time t
-
     """
 
     def __init__(self, label, t, x, y, z):
@@ -63,8 +49,7 @@ def solve_location(sats: List[Satellite]):
     """
 
     # At SLC:
-    V = Vehicle(0, 0, R)
-
+    V = Vehicle(0, 0, helper.R)
 
     done = False
     while not done:
@@ -83,7 +68,7 @@ def solve_location(sats: List[Satellite]):
                 row.append(matrix_element)
             matrix.append(row)
 
-            F.append(distance(V, s1) - distance(V, s2) - c * (s2.t - s1.t))
+            F.append(distance(V, s1) - distance(V, s2) - helper.c * (s2.t - s1.t))
 
         jacobian = np.array(matrix)
         s = np.array(F)
@@ -94,16 +79,16 @@ def solve_location(sats: List[Satellite]):
         V.z += sol[2]
 
         # print(sol)
-        done = np.linalg.norm(sol) < 1/1000000
+        done = np.linalg.norm(sol) < 1 / 1000000
 
-    t_v = (distance(V, sats[0]) + c * sats[0].t) / c
+    t_v = (distance(V, sats[0]) + helper.c * sats[0].t) / helper.c
     return V, t_v
 
 
 satellites = []
 # todo : modify for "production" (by commenting out)
 # for line in sys.stdin:
-for line in open('all/sp_input.txt'):
+for line in open('all/b12_input.txt'):
     # Parse the string and convert to Float64
     satellite_values = list(map(float, line.split()))
     label = satellite_values[0]

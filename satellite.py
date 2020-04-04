@@ -5,16 +5,34 @@ import scipy.constants
 import logging
 import os
 from decimal import *
+import helper_functions as helper
+import math
 
-c = scipy.constants.speed_of_light
-# Radius of the Earth
-R = 6367444.50  # meters
-# Sidereal Day
-s = 86164.09  # seconds
-# Satellite Height
-h = 20200200  # meters
-# Satellite Orbital Period
-p = s / 2
+# Make a list of satellites, with their initial starting positions
+class Satellite:
+    """
+    A representation for a Satellite with a label (id number) sending a signal (x, y, z) at time t
+    """
+
+    def __init__(self, label, u_1, u_2, u_3, v_1, v_2, v_3, theta):
+        self.label = int(label)
+        self.u_1 = u_1
+        self.u_2 = u_2
+        self.u_3 = u_3
+        self.v_1 = v_1
+        self.v_2 = v_2
+        self.v_3 = v_3
+        self.theta = theta
+
+    def __repr__(self):
+        return f'({self.label})'
+
+    def get_curr_position(self, ts):
+        height = helper.R + helper.h
+        inner_value = 2 * math.pi * ts / helper.p + self.theta
+        u = np.array([self.u_1, self.u_2, self.u_3])
+        v = np.array([self.v_1, self.v_2, self.v_3])
+        return height * (math.cos(inner_value) * u + math.sin(inner_value) * v)
 
 # Data from data.dat file
 u = [[0 for x in range(3)] for y in range(24)]
@@ -22,6 +40,7 @@ v = [[0 for x in range(3)] for y in range(24)]
 period = [0 for x in range(24)]
 altitude = [0 for x in range(24)]
 phase = [0 for x in range(24)]
+sat_list = list()
 
 # Creates and writes to log file
 with open("Satellite.log", "w") as log:
@@ -29,62 +48,30 @@ with open("Satellite.log", "w") as log:
     log.write("\n  data.dat: \n\n")
 
     # Writes/Reads information from data.dat
-    with open("data.dat", "r") as data:
+    with open("all/data.dat", "r") as data:
         SatNumb = 0
         index = 0
         for line in data:
             line_info = line.split("/=")
-            # Reads in Pi
-            if index == 0:
-                pi = Decimal(line_info[0])
-                log.write("pi = {}\n".format(pi))
-                index = index + 1
 
-            # Reads in C
-            elif index == 1:
-                c = Decimal(line_info[0])
-                log.write("c = {}\n".format(c))
-                index = index + 1
+            tempIndex = (index - 4) % 9
 
-            # Reads in R
-            elif index == 2:
-                R = Decimal(line_info[0])
-                log.write("R = {}\n".format(R))
+            if tempIndex == 0 or tempIndex == 1 or tempIndex == 2:
+                u[SatNumb][tempIndex] = float(line_info[0])
+                log.write("u[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=tempIndex, Info=line_info[0]))
                 index = index + 1
-
-            # Reads in the value for s
-            elif index == 3:
-                s = Decimal(line_info[0])
-                log.write("s = {}\n".format(s))
+            elif tempIndex == 3 or tempIndex == 4 or tempIndex == 5:
+                v[SatNumb][tempIndex % 3] = line_info[0]
+                log.write(
+                    "v[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=(tempIndex % 3), Info=line_info[0]))
                 index = index + 1
-
+            elif tempIndex == 8:
+                phase[SatNumb] = line_info[0]
+                log.write("phase[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
+                index = index + 1
+                SatNumb = SatNumb + 1
             else:
-                tempIndex = (index - 4) % 9
-
-                if tempIndex == 0 or tempIndex == 1 or tempIndex == 2:
-                    u[SatNumb][tempIndex] = Decimal(line_info[0])
-                    log.write("u[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=tempIndex, Info=line_info[0]))
-                    index = index + 1
-                elif tempIndex == 3 or tempIndex == 4 or tempIndex == 5:
-                    v[SatNumb][tempIndex % 3] = Decimal(line_info[0])
-                    log.write(
-                        "v[{Sat}][{Index}] = {Info}\n".format(Sat=SatNumb, Index=(tempIndex % 3), Info=line_info[0]))
-                    index = index + 1
-                elif tempIndex == 6:
-                    period[SatNumb] = Decimal(line_info[0])
-                    log.write("period[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
-                    index = index + 1
-                elif tempIndex == 7:
-                    altitude[SatNumb] = Decimal(line_info[0])
-                    log.write("altitude[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
-                    index = index + 1
-                elif tempIndex == 8:
-                    phase[SatNumb] = Decimal(line_info[0])
-                    log.write("phase[{Sat}] = {Info}\n".format(Sat=SatNumb, Info=line_info[0]))
-                    index = index + 1
-                    SatNumb = SatNumb + 1
-                else:
-                    continue
+                continue
 
         # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
         for line in sys.stdin:
@@ -99,23 +86,28 @@ with open("Satellite.log", "w") as log:
             cart_coords = helper.polar_to_cart(*value_array)
             print(cart_coords)
 
+            t_v = value_array[0]
             # Use new coordinates to determine what satellites are in view/above the horizon
             sat_in_view = []
-            for sat in satList:
-                if(helper.above_horizon(*cart_coords, 0, 0, 0)):
+            for sat in sat_list:
+                sat_position = np.array(sat.get_curr_position(t_v))
+                if helper.above_horizon(*cart_coords, sat_position[0][0], sat_position[0][1], sat_position[0][2]):
                     sat_in_view.append(sat)
-            t_v = value_array[0]    
+
             for sat in sat_in_view:
                 #time iteration
                 epoch = 0
                 done = False
                 current = t_v
                 while not done:
-                    next = t_v - np.linalg.norm(get_curr_position(current)-cart_coords)/helper.c
-                    if(abs(next-current) < Decimal(0.01/helper.c)):
+                    epoch += 1
+                    next = t_v - np.linalg.norm(sat.get_curr_position(current)-cart_coords)/helper.c
+                    if abs(next-current) < Decimal(0.01/helper.c):
                         done = True
-                    else:
-                        current = next
+                    current = next
 
+                sat_position = np.array(sat.get_curr_position(current))
+                print(sat, current, sat_position[0][0], sat_position[0][1], sat_position[0][2])
 
+            print("yep")
             # Output index, timestamp, and cartesian coordinate location to stdout

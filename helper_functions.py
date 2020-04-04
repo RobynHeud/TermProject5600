@@ -2,10 +2,11 @@ import math
 import numpy as np
 import scipy.constants
 
-#These should be read in from data.dat 
-s = 86164.09  # one sidereal day
+s = 86164.08999999999651  # one sidereal day
 R = 6367444.5  # radius of the earth
 c = scipy.constants.speed_of_light
+h = 20200000  # Satellite Height, meters
+p = s / 2  # Satellite Orbital Period
 
 
 def earth_rotation_matrix(ts):
