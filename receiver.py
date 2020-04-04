@@ -65,8 +65,11 @@ def solve_location(sats: List[Satellite]):
     # At SLC:
     V = Vehicle(0, 0, R)
 
-    for _ in range(4):
+
+    done = False
+    while not done:
         satellite_by_two = []
+
         for i in range(0, len(sats) - 1):
             satellite_by_two.append(sats[i:i + 2])
 
@@ -89,19 +92,24 @@ def solve_location(sats: List[Satellite]):
         V.x += sol[0]
         V.y += sol[1]
         V.z += sol[2]
-    return V
+
+        # print(sol)
+        done = np.linalg.norm(sol) < 1/1000000
+
+    t_v = (distance(V, sats[0]) + c * sats[0].t) / c
+    return V, t_v
 
 
 satellites = []
 # todo : modify for "production" (by commenting out)
 # for line in sys.stdin:
-for line in open('all/b12_input.txt'):
+for line in open('all/sp_input.txt'):
     # Parse the string and convert to Float64
     satellite_values = list(map(float, line.split()))
     label = satellite_values[0]
     satellites.append(Satellite(*satellite_values))
 
-# todo: talk about this method with team
+# todo: talk about this method with team (send email to prof.)
 satellite_for_t = defaultdict(list)
 for s in satellites:
     satellite_for_t[int(s.t)].append(s)
@@ -109,6 +117,6 @@ for s in satellites:
 satellite_for_t = sorted(satellite_for_t.items(), key=lambda x: x[0])
 satellite_for_t = [s for (t, s) in satellite_for_t]
 for group_satellite in satellite_for_t:
-    sol = solve_location(group_satellite)
-    polar = helper.cart_to_polar(0, sol.x, sol.y, sol.z)
+    sol, t = solve_location(group_satellite)
+    polar = helper.cart_to_polar(t, sol.x, sol.y, sol.z)
     print(polar)
