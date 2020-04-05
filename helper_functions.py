@@ -61,7 +61,7 @@ def cart_to_polar(ts, x, y, z):
     (lat_deg, lat_min, lat_sec) = dms(math.pi / 2 - phi)
     (long_deg, long_min, long_sec) = dms(theta)
 
-    return lat_deg, lat_min, lat_sec, NS, long_deg, long_min, long_sec, EW, altitude
+    return lat_deg, lat_min, round(lat_sec, 4), NS, long_deg, long_min, round(long_sec, 4), EW, round(altitude, 4)
 
 
 # Takes in radians and returns a vector of (degrees, minutes, seconds).
