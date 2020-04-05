@@ -49,7 +49,7 @@ def solve_location(sats: List[Satellite]):
     """
 
     # At SLC:
-    V = Vehicle(0, 0, helper.R)
+    V = Vehicle(-1795225.28989696, -4477174.36119832, 4158593.45315397)
 
     done = False
     while not done:
