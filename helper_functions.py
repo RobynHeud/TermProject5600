@@ -15,12 +15,6 @@ def earth_rotation_matrix(ts):
         [[math.cos(alpha), -math.sin(alpha), 0], [math.sin(alpha), math.cos(alpha), 0], [0, 0, 1]])
 
 
-def satellite_rotation_matrix(ts):
-    alpha = 4 * math.pi * ts / s
-    return np.matrix(
-        [[math.cos(alpha), -math.sin(alpha), 0], [math.sin(alpha), math.cos(alpha), 0], [0, 0, 1]])
-
-
 # Takes in geographic coordinates in DMS format and converts to cartesian position.
 # NS and EW are either 1 or -1, 1 for North and East, -1 for South and West
 def polar_to_cart(timestamp, lat_deg, lat_min, lat_sec, NS, long_deg, long_min, long_sec, EW, altitude):
@@ -47,8 +41,8 @@ def cart_to_polar(ts, x, y, z):
     y = coords[0,1]
     z = coords[0,2]
 
-    NS = z / abs(z)
-    EW = y / abs(y)
+    NS = int(z / abs(z))
+    EW = int(y / abs(y))
     r = math.sqrt(x ** 2 + y ** 2 + z ** 2)
     if x != 0:
         theta = np.arctan(y / x)

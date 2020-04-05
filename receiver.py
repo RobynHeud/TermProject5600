@@ -86,7 +86,6 @@ def solve_location(sats: List[Satellite]):
 
 
 satellites = []
-# todo : modify for "production" (by commenting out)
 for line in sys.stdin:
     # Parse the string and convert to Float64
     satellite_values = list(map(float, line.split()))

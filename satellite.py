@@ -20,9 +20,6 @@ class Satellite:
         self.v_3 = v_3
         self.theta = theta
 
-    def __repr__(self):
-        return f'({self.label})'
-
     def get_curr_position(self, ts):
         height = helper.R + helper.h
         inner_value = 2 * math.pi * ts / helper.p + self.theta
@@ -93,10 +90,18 @@ with open("Satellite.log", "w") as log:
 
         # Parse the string and convert to Float64
         line_array = line.split()
+        if len(line_array) != 10:
+            print('Invalid Entry - Incorrect number of values')
+            continue
+
         value_array = []
         for elm in line_array:
-            new_elm = float(elm)
-            value_array.append(new_elm)
+            try:
+                new_elm = float(elm)
+                value_array.append(new_elm)
+            except ValueError:
+                print('Invalid Entry - One or more entries not a number')
+                continue
 
         # Translate to Cartesian coordinates with rotation
         cart_coords = helper.polar_to_cart(*value_array)
