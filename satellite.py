@@ -30,12 +30,18 @@ class Satellite:
         v = np.array([self.v_1, self.v_2, self.v_3])
         return height * (math.cos(inner_value) * u + math.sin(inner_value) * v)
 
+    def above_horizon(self, ts, veh_x, veh_y, veh_z):
+        vehicle = np.array([veh_x, veh_y, veh_z])
+        satellite = self.get_curr_position(ts)
+
+        return vehicle.dot(satellite.transpose()) > vehicle.dot(vehicle.transpose())
+
 
 # List of satellites in orbit
 sat_list = list()
 
 # Get satellite details from data.dat file and populate the satellite list
-with open("all/data.dat", "r") as data:
+with open("data.dat", "r") as data:
     sat_num = 0
     new_sat = Satellite(sat_num)
 
@@ -82,7 +88,7 @@ with open("Satellite.log", "w") as log:
 
     # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
     for epoch, line in enumerate(sys.stdin):
-        log.write("\nEpoch = {epoch_numb}".format(epoch_numb=epoch))
+        log.write("\n\nEpoch = {epoch_numb}".format(epoch_numb=epoch))
         log.write("\nInput: {info}".format(info=line))
 
         # Parse the string and convert to Float64
@@ -101,12 +107,11 @@ with open("Satellite.log", "w") as log:
         # Use new coordinates to determine what satellites are in view/above the horizon
         sat_in_view = []
         for sat in sat_list:
-            sat_position = np.array(sat.get_curr_position(t_v))
-            if helper.above_horizon(*cart_coords, sat_position[0], sat_position[1], sat_position[2]):
+            if sat.above_horizon(t_v, *cart_coords):
                 sat_in_view.append(sat)
 
         # Find the timestamp for each satellite
-        log.write("\nOutput:")
+        log.write("Output:")
         for sat in sat_in_view:
             # set current to the vehicle timestamp to start
             last_ts = t_v

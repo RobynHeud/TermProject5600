@@ -89,11 +89,3 @@ def rads(degrees, minutes, seconds):
     # convert to seconds first
     temp = degrees * 3600 + minutes * 60 + seconds
     return temp * math.pi / (3600 * 180)
-
-
-def above_horizon(veh_x, veh_y, veh_z, sat_x, sat_y, sat_z):
-    vehicle = np.array([veh_x, veh_y, veh_z])
-    satellite = np.array([sat_x, sat_y, sat_z])
-
-    return vehicle.dot(satellite.transpose()) > vehicle.dot(vehicle.transpose())
-

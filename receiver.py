@@ -79,7 +79,7 @@ def solve_location(sats: List[Satellite]):
         V.z += sol[2]
 
         # print(sol)
-        done = np.linalg.norm(sol) < 1 / 1000000
+        done = np.linalg.norm(sol) < 1 / 100000000
 
     t_v = (distance(V, sats[0]) + helper.c * sats[0].t) / helper.c
     return V, t_v
@@ -87,8 +87,7 @@ def solve_location(sats: List[Satellite]):
 
 satellites = []
 # todo : modify for "production" (by commenting out)
-# for line in sys.stdin:
-for line in open('all/b12_input.txt'):
+for line in sys.stdin:
     # Parse the string and convert to Float64
     satellite_values = list(map(float, line.split()))
     label = satellite_values[0]
@@ -104,4 +103,4 @@ satellite_for_t = [s for (t, s) in satellite_for_t]
 for group_satellite in satellite_for_t:
     sol, t = solve_location(group_satellite)
     polar = helper.cart_to_polar(t, sol.x, sol.y, sol.z)
-    print(polar)
+    print(*polar)
