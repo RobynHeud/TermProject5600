@@ -102,4 +102,4 @@ satellite_for_t = [s for (t, s) in satellite_for_t]
 for group_satellite in satellite_for_t:
     sol, t = solve_location(group_satellite)
     polar = helper.cart_to_polar(t, sol.x, sol.y, sol.z)
-    print(t, *polar)
+    print(round(t, 4), *polar)
