@@ -20,6 +20,9 @@ class Satellite:
         self.v_3 = v_3
         self.theta = theta
 
+    def __repr__(self):
+        return f'({self.label})'
+
     def get_curr_position(self, ts):
         height = helper.R + helper.h
         inner_value = 2 * math.pi * ts / helper.p + self.theta
