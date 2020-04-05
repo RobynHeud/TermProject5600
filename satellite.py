@@ -72,9 +72,11 @@ with open("Satellite.log", "w") as log:
                 SatNumb = SatNumb + 1
             else:
                 continue
-
+        epoch = 0
         # Take in line with timestamp, latitude (3 parts), NS, longitude (3 parts), EW, and height
         for line in sys.stdin:
+            log.write(" --- epoch = {epoch_numb}\n".format(epoch_numb = epoch))
+            log.write("read {info}\n".format(info = line))
             # Parse the string and convert to Float64
             line_array = line.split()
             value_array = []
@@ -94,20 +96,19 @@ with open("Satellite.log", "w") as log:
                 if helper.above_horizon(*cart_coords, sat_position[0][0], sat_position[0][1], sat_position[0][2]):
                     sat_in_view.append(sat)
 
+            log.write("Wrote:\n")
             for sat in sat_in_view:
-                #time iteration
-                epoch = 0
                 done = False
                 current = t_v
-                while not done:
-                    epoch += 1
+                while not done:                    
                     next = t_v - np.linalg.norm(sat.get_curr_position(current)-cart_coords)/helper.c
                     if abs(next-current) < Decimal(0.01/helper.c):
                         done = True
                     current = next
 
                 sat_position = np.array(sat.get_curr_position(current))
-                print(sat, current, sat_position[0][0], sat_position[0][1], sat_position[0][2])
-
+                log.write("{Sat_Num} {Time_Curr} {Sat_Pos_1} {Sat_Pos_2} {Sat_Pos_3}".format(Sat_Num = sat, Time_Curr = current, Sat_Pos_1 = sat_position[0][0], Sat_Pos_2 = sat_position[0][1], Sat_Pos_3 = sat_position[0][2]))
+                # print(sat, current, sat_position[0][0], sat_position[0][1], sat_position[0][2])
+            epoch += 1
             print("yep")
             # Output index, timestamp, and cartesian coordinate location to stdout
