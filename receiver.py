@@ -79,7 +79,7 @@ def solve_location(sats: List[Satellite]):
         V.z += sol[2]
 
         # print(sol)
-        done = np.linalg.norm(sol) < 1 / 100000000
+        done = np.linalg.norm(sol) < 1 / 1000000
 
     t_v = (distance(V, sats[0]) + helper.c * sats[0].t) / helper.c
     return V, t_v
